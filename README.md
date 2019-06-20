@@ -5,7 +5,9 @@
 This is the classic Todo app exercise. Your task is to create a simple todo app - no backend required.
 Exactly how you implement and design this is up to you - but your solution should be implemented in the files `index.html`, `js/todo.js` and `style/todo.css`. You may use the screenshot at the bottom of this page as inspiration.
 
-There is a webpack-dev-server already set up for you to get started developing quickly. Get going with `npm run dev`.
+There is a webpack-dev-server already set up for you to get started developing quickly:
+
+```npm run dev```.
 
 You may not use any frameworks or libraries. SASS is OK.
 
@@ -18,22 +20,22 @@ You may not use any frameworks or libraries. SASS is OK.
 * Move the cards marked as 'done' to the bottom of the list.
 
 ### Technical requirements
-* Keep state in a object and *NOT* in the DOM. In its simplest form, this means that the todo’s should be stored in an array. The view should be dependent on the state, not the other way around.
-* Persisting in localstorage. This is actually trivial once you have a state object: store the current state in the browser's localstorage. When the app is closed and then opened again, the state should be restored.
+* Keep the application state in an object - the state must *NOT* be depedent on the DOM. The view should be dependent on the state, not the other way around. In its simplest form, this means that the state would be the list of todo’s stored as an array.
+* Persist in localstorage. This is actually trivial once you have a state object: store the current state in the browser's localstorage. When the app is closed and then opened again, the state should be restored.
 * Lint your code with Airbnb’s ESlint-configuration
 
 ### Optional (yes, really!) functionality
-The list below contains additional functionality that is optional to implement. Treat them as suggestions.
-You are free to add other functionality (as long as the requirements above are still fulfilled) to your app if you come up with something better. Take the opportunity to boost your app and use it in your portfolio!
+Take the opportunity to boost your app and use it in your portfolio! The list below contains additional functionality that is optional to implement. Treat them as suggestions.
+You are free to add other functionality (as long as the requirements above are still fulfilled) to your app if you come up with something better.
 * Add date and a timestamp to the cards. Sort the cards based on the timestamp. (Cards marked as done should still be in the bottom of the list)
 * Let the user decide whether to sort the cards in ascending or descending order.
 
 ### A few tips on the way
 * Check the console, make sure it's clean before sending in the code
-* Keep your code modular (build small functions, think that each function should have one single responsibility)
+* Keep your code modular (build small functions, try to let each function have one single responsibility)
 * Use modern JavaScript
 * Think about naming your variables and functions in a way that make the code self-documenting
-* Use consistent naming (e.g. don't mix camel case & hyphens)
+* Use a consistent naming convention (e.g. don't mix camel case & hyphens)
 * Use semantic html (e.g use the form element)
 * Use a css reset or normalize (or sensible defaults for elements)
 
