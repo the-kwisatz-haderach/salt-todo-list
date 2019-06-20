@@ -5,18 +5,9 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --fix",
-    "dev": "webpack-dev-server"
+    "dev": "webpack-dev-server --"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/saltsthlm/salt-jsfs-todo.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/saltsthlm/salt-jsfs-todo/issues"
-  },
-  "homepage": "https://github.com/saltsthlm/salt-jsfs-todo#readme",
+  "license": "MIT",
   "devDependencies": {
     "eslint": "^5.15.3",
     "eslint-config-airbnb-base": "^13.1.0",
