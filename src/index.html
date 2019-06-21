@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,23 @@
   <link rel="stylesheet" type="text/css" href="./style/todo.css">
   <script defer src="./js/todo.js"></script>
 </head>
+
 <body>
-  <!-- Add your markup here -->
+  <h1>Create a new todo list.</h1>
+  <form>
+    <fieldset>
+      <legend>Create new list item</legend>
+      <label for="title">Title</label>
+      <input id="title" type="text" name="title" placeholder="Buy eggs..." required />
+      <label for="description">Description</label>
+      <input id="description" type="text" name="description" placeholder="Needed for pancakes..." />
+      <button id="submit-todo" type="submit">Add item</button>
+    </fieldset>
+  </form>
+  <h2>My todo items</h2>
+  <ul id="todo-list">
+    
+  </ul>
 </body>
+
 </html>
