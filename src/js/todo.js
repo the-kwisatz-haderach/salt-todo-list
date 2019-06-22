@@ -22,6 +22,8 @@ window.onload = () => {
     const id = addCardState(title, description);
     const listItem = createCard(title, description, id);
     list.append(listItem);
+    const removeButtons = document.querySelectorAll('.remove-todo');
+    removeButtons.forEach(button => button.addEventListener('click', removeCard));
     emptyForm();
   }
 
@@ -45,25 +47,28 @@ window.onload = () => {
     let card = `<div>`;
     card += `<h3>${title}</h3>`;
     card += `<p>${description}</p>`;
-    card += `<button class="remove-todo" type="button" onclick="removeCard(this);">Remove item</button>`;
+    card += `<button class="remove-todo" type="button">Remove item</button>`;
     card += `</div>`;
     listItem.innerHTML = card;
     return listItem;
   }
 
-  const removeButtons = document.querySelectorAll('.remove-todo');
-  removeButtons.forEach(button => button.addEventListener('click', removeCard));
-
   function markAsDone(event) {
+    if (event.target.type === 'button') return;
     const listItem = event.currentTarget;
     const list = listItem.parentNode;
     listItem.classList.toggle('--marked');
-    list.removeChild(listItem);
-    list.append(listItem);
+    if (listItem.classList.contains('--marked')) {
+      list.removeChild(listItem);
+      list.append(listItem);
+    } else {
+      list.insertAdjacentElement('afterbegin', listItem);
+    }
   }
 
-  function removeCard(elem) {
+  function removeCard(event) {
     let state = getCurrentState();
+    const elem = event.currentTarget;
     const listItem = elem.parentElement.parentElement;
     const newStateList = state.list.filter(elem => elem.id !== parseInt(listItem.id));
     state.list = newStateList;
