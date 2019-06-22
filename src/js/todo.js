@@ -11,9 +11,9 @@ window.onload = () => {
     });
   }
 
-  const submit = document.getElementById('submit-todo');
+  const form = document.getElementById('create-todo');
   
-  submit.onclick = event => {
+  form.onsubmit = event => {
     const list = document.getElementById('todo-list');
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
