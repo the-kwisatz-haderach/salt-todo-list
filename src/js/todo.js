@@ -5,8 +5,8 @@ window.onload = () => {
   else {
     const state = getCurrentState();
     const list = document.getElementById('todo-list');
-    state.list.forEach(listItem => {
-      const card = createCard(listItem.title, listItem.description, listItem.id);
+    state.list.forEach(({ title, description, id, completed }) => {
+      const card = createCard(title, description, id, completed);
       list.append(card);
     });
   }
@@ -33,15 +33,16 @@ window.onload = () => {
       id: state.list.length ? state.list[state.list.length - 1].id + 1 : state.list.length,
       title: cardTitle,
       description: cardDescription,
-      completed: true
+      completed: false
     }
     state.list.push(cardState);
     localStorage.setItem('listState', JSON.stringify(state));
     return cardState.id;
   }
 
-  function createCard(title, description, id) {
+  function createCard(title, description, id, completed) {
     const listItem = document.createElement('LI');
+    if (completed) listItem.classList.add('--marked');
     listItem.addEventListener('click', markAsDone);
     listItem.setAttribute('id', id);
     let card = `<div>`;
@@ -58,6 +59,13 @@ window.onload = () => {
     const listItem = event.currentTarget;
     const list = listItem.parentNode;
     listItem.classList.toggle('--marked');
+    const state = getCurrentState();
+    state.list = state.list.map(elem => {
+      if (elem.id === parseInt(listItem.id)) elem.completed = !elem.completed;
+      return elem;
+    });
+    localStorage.setItem('listState', JSON.stringify(state));
+
     if (listItem.classList.contains('--marked')) {
       list.removeChild(listItem);
       list.append(listItem);

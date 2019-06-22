@@ -10,21 +10,31 @@
 </head>
 
 <body>
-  <h1>Create a new todo list.</h1>
-  <form autocomplete="off">
-    <fieldset>
-      <legend>Create new list item</legend>
-      <label for="title">Title</label>
-      <input id="title" type="text" name="title" placeholder="Buy eggs..." required />
-      <label for="description">Description</label>
-      <input id="description" type="text" name="description" placeholder="Needed for pancakes..." />
-      <button id="submit-todo" type="submit">Add item</button>
-    </fieldset>
-  </form>
-  <h2>My todo items</h2>
-  <ul id="todo-list">
-    
-  </ul>
+  <main>
+    <heading>
+      <h1>Create a new todo list.</h1>
+    </heading>
+    <section>
+      <form autocomplete="off">
+        <fieldset>
+          <legend>Create new list item</legend>
+          <label for="title">Title</label>
+          <input id="title" type="text" name="title" placeholder="Buy eggs..." required />
+          <label for="description">Description</label>
+          <input id="description" type="text" name="description" placeholder="Needed for pancakes..." />
+          <button id="submit-todo" type="submit">Add item</button>
+        </fieldset>
+      </form>
+    </section>
+    <section>
+      <h2>My todo items</h2>
+      <ul id="todo-list"></ul>
+    </section>
+    <section>
+      <h2>My completed items</h2>
+      <ul id="todo-completed-list"></ul>
+    </section>
+  </main>
 </body>
 
 </html>
