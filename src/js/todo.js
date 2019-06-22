@@ -1,7 +1,7 @@
 /* Todo app javascript */
 window.onload = () => {
 
-  if (!localStorage.listState) setInitialState();
+  if (!localStorage.todoList) setInitialState();
   else {
     const state = getCurrentState();
     const list = document.getElementById('todo-list');
@@ -22,8 +22,6 @@ window.onload = () => {
     const id = addCardState(title, description);
     const listItem = createCard(title, description, id);
     list.append(listItem);
-    const removeButtons = document.querySelectorAll('.remove-todo');
-    removeButtons.forEach(button => button.addEventListener('click', removeCard));
     emptyForm();
   }
 
@@ -36,14 +34,14 @@ window.onload = () => {
       completed: false
     }
     state.list.push(cardState);
-    localStorage.setItem('listState', JSON.stringify(state));
+    localStorage.setItem('todoList', JSON.stringify(state));
     return cardState.id;
   }
 
   function createCard(title, description, id, completed) {
     const listItem = document.createElement('LI');
     if (completed) listItem.classList.add('--marked');
-    listItem.addEventListener('click', markAsDone);
+    listItem.addEventListener('click', handleClick);
     listItem.setAttribute('id', id);
     let card = `<div>`;
     card += `<h3>${title}</h3>`;
@@ -54,8 +52,12 @@ window.onload = () => {
     return listItem;
   }
 
+  function handleClick(event) {
+    if (event.target.type === 'button') removeCard(event);
+    else markAsDone(event);
+  }
+
   function markAsDone(event) {
-    if (event.target.type === 'button') return;
     const listItem = event.currentTarget;
     const list = listItem.parentNode;
     listItem.classList.toggle('--marked');
@@ -64,7 +66,7 @@ window.onload = () => {
       if (elem.id === parseInt(listItem.id)) elem.completed = !elem.completed;
       return elem;
     });
-    localStorage.setItem('listState', JSON.stringify(state));
+    localStorage.setItem('todoList', JSON.stringify(state));
 
     if (listItem.classList.contains('--marked')) {
       list.removeChild(listItem);
@@ -76,24 +78,24 @@ window.onload = () => {
 
   function removeCard(event) {
     let state = getCurrentState();
-    const elem = event.currentTarget;
+    const elem = event.target;
     const listItem = elem.parentElement.parentElement;
     const newStateList = state.list.filter(elem => elem.id !== parseInt(listItem.id));
     state.list = newStateList;
-    localStorage.setItem('listState', JSON.stringify(state));
+    localStorage.setItem('todoList', JSON.stringify(state));
     listItem.parentNode.removeChild(listItem);
   }
 
   window.removeCard = removeCard;
 
   function getCurrentState() {
-    let stateObj = JSON.parse(localStorage.getItem('listState'));
+    let stateObj = JSON.parse(localStorage.getItem('todoList'));
     return stateObj;
   }
   
   function setInitialState() {
-    let stateObj = JSON.stringify({ list: [] });
-    localStorage.setItem('listState', stateObj);
+    let stateObj = `{"list":[]}`;
+    localStorage.setItem('todoList', stateObj);
   }
   
   function emptyForm() {
