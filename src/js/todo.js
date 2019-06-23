@@ -90,11 +90,10 @@ window.onload = () => {
     if (target.classList.contains('remove-todo')) {
       removeTodo(currentTarget);
     } else {
-      const todo = currentTarget;
-      const todoState = getTodoState(todo.id);
-      todo.classList.toggle('--done');
-      if (todoState === 'done') updateTodoState(todo.id, 'done');
-      else updateTodoState(todo.id, 'active');
+      const { id } = currentTarget;
+      const todoState = getTodoState(id);
+      if (todoState === 'active') updateTodoState(id, 'done');
+      else updateTodoState(id, 'active');
     }
     renderNewList();
   }
