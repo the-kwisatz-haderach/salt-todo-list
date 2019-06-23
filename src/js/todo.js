@@ -3,10 +3,10 @@ window.onload = () => {
 
   buildHtml();
   
-  if (!localStorage.todoList) setInitialState();
-  else populateDom();
+  if (!localStorage.todoList) createInitialState();
+  else renderNewList();
 
-  function populateDom() {
+  function renderNewList() {
     clearListsHtml();
     const { items, sortOrder } = getTodoList();
     
@@ -18,27 +18,30 @@ window.onload = () => {
     });
   }
 
+  const sortSelector = document.getElementById('sort-order');
+  sortSelector.onchange = event => {
+    changeSortOrder(event);
+    renderNewList();
+  }
+
   const form = document.getElementById('create-todo');
-  document.getElementById('sort-order').onchange = changeSortOrder;
-  
   form.onsubmit = event => {
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
     if (!title) return;
     
     event.preventDefault();
+
     createTodo(title, description);
-    populateDom();
     resetForm();
+    renderNewList();
   }
 
   function addToDom(item, state) {
     const todoListElement = document.getElementById('todo-list');
     const completedListElement = document.getElementById('completed-list');
-    const { sortOrder } = getTodoList();
-    const placement = sortOrder === 'ascending' ? 'beforeend' : 'beforeend';
-    if (state === 'done') completedListElement.insertAdjacentElement(placement, item);
-    else todoListElement.insertAdjacentElement(placement, item);
+    if (state === 'done') completedListElement.insertAdjacentElement('afterbegin', item);
+    else todoListElement.insertAdjacentElement('afterbegin', item);
   }
 
   function createTodo(todoTitle, todoDescription) {
@@ -58,9 +61,7 @@ window.onload = () => {
   }
 
   function createTodoElement(title, description, id, state, timestamp) {
-    timestamp = new Date(timestamp).toUTCString();
-    // timestamp = new Date().toDateString();
-    console.log('fix me');
+    timestamp = new Date().toDateString();
 
     const todoElement = document.createElement('LI');
     todoElement.classList.add(`--${state}`);
@@ -79,34 +80,34 @@ window.onload = () => {
     return todoElement;
   }
 
+  function getTodoState(id) {
+    const { items } = getTodoList();
+    const todo = items.find(item => item.id === id);
+    return todo.state;
+  }
+
   function handleTodoClick({ target, currentTarget }) {
     if (target.classList.contains('remove-todo')) {
-      const todo = firstAncestorOfType(target, 'li');
+      const todo = currentTarget;
+      // const todo = firstAncestorOfType(target, 'li');
       removeTodo(todo);
     } else {
       const todo = currentTarget;
+      // console.log(getTodoState(todo.id));
       todo.classList.toggle('--done');
       console.log('FIX ME / CSS');
-      if (todo.classList.contains('--done')) markAsDone(todo);
-      else makeActive(todo);
+      if (todo.classList.contains('--done')) {
+        updateTodoState(todo.id, 'done');
+      } 
+      else updateTodoState(todo.id, 'active');
     }
+    renderNewList();
   }
 
   function changeSortOrder({ currentTarget }) {
     todoList = getTodoList();
     todoList.sortOrder = currentTarget.value;
     localStorage.setItem('todoList', JSON.stringify(todoList));
-    populateDom();
-  }
-
-  function makeActive(todo) {
-    updateTodoState(todo.id, 'active');
-    populateDom();
-  }
-  
-  function markAsDone(todo) {
-    updateTodoState(todo.id, 'done');
-    populateDom();
   }
 
   function updateTodoState(id, newState = 'active') {
@@ -122,7 +123,6 @@ window.onload = () => {
     const todoList = getTodoList();
     todoList.items = todoList.items.filter(elem => elem.id !== parseInt(todo.id));
     localStorage.setItem('todoList', JSON.stringify(todoList));
-    todo.parentElement.removeChild(todo);
   }
 
   function clearAll() {
@@ -146,7 +146,7 @@ window.onload = () => {
     return stateObj;
   }
   
-  function setInitialState() {
+  function createInitialState() {
     let stateObj = JSON.stringify({ items: [], sortOrder: 'descending' });
     localStorage.setItem('todoList', stateObj);
   }
