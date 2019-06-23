@@ -82,23 +82,18 @@ window.onload = () => {
 
   function getTodoState(id) {
     const { items } = getTodoList();
-    const todo = items.find(item => item.id === id);
+    const todo = items.find(item => item.id === parseInt(id));
     return todo.state;
   }
 
   function handleTodoClick({ target, currentTarget }) {
     if (target.classList.contains('remove-todo')) {
-      const todo = currentTarget;
-      // const todo = firstAncestorOfType(target, 'li');
-      removeTodo(todo);
+      removeTodo(currentTarget);
     } else {
       const todo = currentTarget;
-      // console.log(getTodoState(todo.id));
+      const todoState = getTodoState(todo.id);
       todo.classList.toggle('--done');
-      console.log('FIX ME / CSS');
-      if (todo.classList.contains('--done')) {
-        updateTodoState(todo.id, 'done');
-      } 
+      if (todoState === 'done') updateTodoState(todo.id, 'done');
       else updateTodoState(todo.id, 'active');
     }
     renderNewList();
@@ -190,20 +185,22 @@ window.onload = () => {
   }
 }
 
-function firstAncestorOfType(elem, ancestorType) {
-  let ancestorFound = false;
-  while (!ancestorFound) {
-    if (!elem.parentElement) {
-      console.error(`${elem.nodeName} element doesn\'t have an ancestor of type ${ancestorType}.`);
-      break;
-    }
-    else if (elem.parentElement.nodeName.toLowerCase() === ancestorType.toLowerCase()) {
-      ancestorFound = !ancestorFound;
-      return elem.parentElement;
-    } 
-    elem = elem.parentElement;
-  }
-}
+// function firstAncestorOfType(elem, ancestorType) {
+//   let ancestorFound = false;
+//   while (!ancestorFound) {
+//     if (!elem.parentElement) {
+//       console.error(`${elem.nodeName} element doesn\'t have an ancestor of type ${ancestorType}.`);
+//       break;
+//     }
+//     else if (elem.parentElement.nodeName.toLowerCase() === ancestorType.toLowerCase()) {
+//       ancestorFound = !ancestorFound;
+//       return elem.parentElement;
+//     } 
+//     elem = elem.parentElement;
+//   }
+// }
+
+console.log('remove me!');
 
 function sortByProperty(property, order) {
   switch (order) {
