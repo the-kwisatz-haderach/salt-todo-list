@@ -7,33 +7,38 @@ window.onload = () => {
   else populateDom();
 
   function populateDom() {
-    const todoList = getTodoList();
-    todoList.items.forEach(({ title, description, id, state }) => {
-      const todoElement = createTodoElement(title, description, id, state);
-      addToDom(todoElement, state);
+    clearListsHtml();
+    const { items, sortOrder } = getTodoList();
+    
+    items
+      .sortByProperty('timestamp', sortOrder)
+      .forEach(({ title, description, id, state, timestamp }) => {
+        const todoElement = createTodoElement(title, description, id, state, timestamp);
+        addToDom(todoElement, state);
     });
   }
 
   const form = document.getElementById('create-todo');
+  document.getElementById('sort-order').onchange = changeSortOrder;
   
   form.onsubmit = event => {
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
-
     if (!title) return;
     
     event.preventDefault();
-    const { id } = createTodo(title, description);
-    const todoElement = createTodoElement(title, description, id);
-    addToDom(todoElement);
+    createTodo(title, description);
+    populateDom();
     resetForm();
   }
 
   function addToDom(item, state) {
     const todoListElement = document.getElementById('todo-list');
-    const completedListElement = document.getElementById('completed-list');  
-    if (state === 'done') completedListElement.insertAdjacentElement('afterbegin', item);
-    else todoListElement.insertAdjacentElement('afterbegin', item);
+    const completedListElement = document.getElementById('completed-list');
+    const { sortOrder } = getTodoList();
+    const placement = sortOrder === 'ascending' ? 'beforeend' : 'beforeend';
+    if (state === 'done') completedListElement.insertAdjacentElement(placement, item);
+    else todoListElement.insertAdjacentElement(placement, item);
   }
 
   function createTodo(todoTitle, todoDescription) {
@@ -44,18 +49,21 @@ window.onload = () => {
       id: items.length ? items[items.length - 1].id + 1 : 0,
       title: todoTitle,
       description: todoDescription,
-      state: 'active'
+      state: 'active',
+      timestamp: Date.now()
     }
 
     items.push(todo);
     localStorage.setItem('todoList', JSON.stringify(todoList));
-
-    return todo;
   }
 
-  function createTodoElement(title, description, id, state) {
+  function createTodoElement(title, description, id, state, timestamp) {
+    timestamp = new Date(timestamp).toUTCString();
+    // timestamp = new Date().toDateString();
+    console.log('fix me');
+
     const todoElement = document.createElement('LI');
-    if (state === 'done') todoElement.classList.add('--marked');
+    todoElement.classList.add(`--${state}`);
     todoElement.addEventListener('click', handleTodoClick);
     todoElement.id = id;
 
@@ -64,6 +72,7 @@ window.onload = () => {
     todoHtml += `<h3>${title}</h3>`;
     todoHtml += description ? `<p>${description}</p>` : '';
     todoHtml += `<button class="remove-todo" type="button">Remove item</button>`;
+    todoHtml += `<time datetime="${timestamp}">Created ${timestamp}</time>`;
     todoHtml += `</div>`;
     todoElement.innerHTML = todoHtml;
 
@@ -76,57 +85,60 @@ window.onload = () => {
       removeTodo(todo);
     } else {
       const todo = currentTarget;
-      todo.classList.toggle('--marked');
-      if (todo.classList.contains('--marked')) markAsDone(todo);
+      todo.classList.toggle('--done');
+      console.log('FIX ME / CSS');
+      if (todo.classList.contains('--done')) markAsDone(todo);
       else makeActive(todo);
     }
   }
 
-  function firstAncestorOfType(elem, ancestorElemType) {
-    let ancestorFound = false;
-    while (!ancestorFound) {
-      if (!elem.parentElement) {
-        console.error(`${elem.nodeName} element doesn\'t have an ancestor of type ${ancestorElemType}.`);
-        break;
-      }
-      else if (elem.parentElement.nodeName.toLowerCase() === ancestorElemType.toLowerCase()) {
-        ancestorFound = !ancestorFound;
-        return elem.parentElement;
-      } 
-      elem = elem.parentElement;
-    }
+  function changeSortOrder({ currentTarget }) {
+    todoList = getTodoList();
+    todoList.sortOrder = currentTarget.value;
+    localStorage.setItem('todoList', JSON.stringify(todoList));
+    populateDom();
   }
 
   function makeActive(todo) {
     updateTodoState(todo.id, 'active');
-    todo.parentNode.removeChild(todo);
-    addToDom(todo, 'active');
+    populateDom();
   }
   
   function markAsDone(todo) {
     updateTodoState(todo.id, 'done');
-    todo.parentNode.removeChild(todo);
-    addToDom(todo, 'done');
+    populateDom();
   }
 
   function updateTodoState(id, newState = 'active') {
     const todoList = getTodoList();
-    let { items } = todoList;
-    
-    items = items.map(item => {
+    todoList.items = todoList.items.map(item => {
       if (item.id === parseInt(id)) item.state = newState;
       return item;
     });
-
     localStorage.setItem('todoList', JSON.stringify(todoList));
   }
-
+  
   function removeTodo(todo) {
-    let { items } = getTodoList();
-    items = items.filter(elem => elem.id !== parseInt(todo.id));
-    const newTodoList = { items: [...items] };
-    localStorage.setItem('todoList', JSON.stringify(newTodoList));
+    const todoList = getTodoList();
+    todoList.items = todoList.items.filter(elem => elem.id !== parseInt(todo.id));
+    localStorage.setItem('todoList', JSON.stringify(todoList));
     todo.parentElement.removeChild(todo);
+  }
+
+  function clearAll() {
+    const todoList = getTodoList();
+    todoList.items = [];
+    localStorage.setItem('todoList', JSON.stringify(todoList));
+    clearListsHtml();
+  }
+  
+  window.clearAll = clearAll;
+
+  function clearListsHtml() {
+    const todoList = document.getElementById('todo-list');
+    const completedList = document.getElementById('completed-list');
+    todoList.innerHTML = '';
+    completedList.innerHTML = '';
   }
 
   function getTodoList() {
@@ -135,7 +147,7 @@ window.onload = () => {
   }
   
   function setInitialState() {
-    let stateObj = `{"items":[]}`;
+    let stateObj = JSON.stringify({ items: [], sortOrder: 'descending' });
     localStorage.setItem('todoList', stateObj);
   }
   
@@ -147,9 +159,19 @@ window.onload = () => {
   function buildHtml() {
     const presentationSection = document.getElementById('todo-presentation');
     const creationSection = document.getElementById('todo-creation');
+    const sortOrder = getTodoList() ? getTodoList().sortOrder : undefined;
 
     presentationSection.innerHTML =
       `<h2>My todo items</h2>
+      <label for="sort-order">Sort order</label> 
+      <select id="sort-order">
+        ${ sortOrder === 'ascending' 
+        ? `<option value="ascending">Ascending</option>
+          <option value="descending">Descending</option>` 
+        : `<option value="descending">Descending</option>
+          <option value="ascending">Ascending</option>` }
+      </select>
+      <button type="button" onclick="clearAll();">Clear all</button>
       <ul id="todo-list"></ul>
       <h2>My completed items</h2>
       <ul id="completed-list"></ul>`;
@@ -167,3 +189,35 @@ window.onload = () => {
       </form>`;
   }
 }
+
+function firstAncestorOfType(elem, ancestorType) {
+  let ancestorFound = false;
+  while (!ancestorFound) {
+    if (!elem.parentElement) {
+      console.error(`${elem.nodeName} element doesn\'t have an ancestor of type ${ancestorType}.`);
+      break;
+    }
+    else if (elem.parentElement.nodeName.toLowerCase() === ancestorType.toLowerCase()) {
+      ancestorFound = !ancestorFound;
+      return elem.parentElement;
+    } 
+    elem = elem.parentElement;
+  }
+}
+
+function sortByProperty(property, order) {
+  switch (order) {
+    case 'descending':
+      return this.sort((curr, next) => 
+          curr[property] > next[property] ? 1 
+        : curr[property] < next[property] ? -1 
+        : 0);
+    case 'ascending':
+      return this.sort((curr, next) => 
+          curr[property] > next[property] ? -1 
+        : curr[property] < next[property] ? 1 
+        : 0);
+  }
+}
+
+Array.prototype.sortByProperty = sortByProperty;
