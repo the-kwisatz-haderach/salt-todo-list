@@ -2,16 +2,21 @@
 @import './theme';
 @import './base';
 @import './layout';
-
-.--done {
-  background-color: rgb(60, 213, 121);
-}
+@import './components/heading';
+@import './components/button';
+@import './components/filter-menu';
+@import './components/todo-list';
 
 body {
-  background-color: rgb(104, 191, 238);
+  background-color: $primary-blue;
+}
+
+.todo-presentation ul:nth-child(2) {
+  margin-top: 20px;
 }
 
 main {
   background-color: #fff;
-  margin: 25px;
+  margin: 10px;
+  border: 2px solid $primary-dark-blue;
 }

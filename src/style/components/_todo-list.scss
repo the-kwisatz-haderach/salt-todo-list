@@ -1,0 +1,97 @@
+.todo-list {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+}
+
+%list-item {
+  cursor: pointer;
+  background-color: $primary-grey;
+  padding: 22px;
+  margin: 10px 0;
+  width: 100%;
+  border: 2px solid transparent;
+  transition: all 0.2s ease-out;
+  word-break: break-word;
+}
+
+.list-item--active {
+  @extend %list-item;
+}
+
+.list-item--active:hover {
+  border: 2px solid $primary-blue;
+  background-color: $primary-light-blue;
+}
+
+.list-item--done {
+  @extend %list-item;
+  background-color: $accent-light-green;
+  
+  .list-item__heading, .list-item__description {
+    text-decoration: line-through;
+    font-style: italic;
+    color: $accent-dark-green;
+  } 
+}
+
+.list-item--done:hover {
+  border: 2px solid $accent-dark-green;
+  background-color: $accent-light-green;
+}
+
+.list-item--done .list-item__heading:after {
+  content: 'DONE ✓';
+  float: right;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: $accent-dark-green;
+  text-decoration: none;
+  font-style: normal;
+}
+
+.list-item__heading {
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.list-item__description {
+  line-height: 1.4;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.list-item__timestamp {
+  font-size: 0.7rem;
+  font-style: italic;
+}
+
+.list-item__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+@media only screen and (min-width: 768px) {
+  .todo-list {
+    width: 98%;
+  }
+
+  %list-item {
+    width: 43%;
+    margin: 5px auto;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .todo-list {
+    width: 98%;
+  }
+
+  %list-item {
+    width: 28%;
+  }
+}

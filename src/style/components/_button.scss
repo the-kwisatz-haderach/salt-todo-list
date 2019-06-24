@@ -1,0 +1,51 @@
+%button {
+  border: 2px solid $primary-dark-blue;
+  background-color: $secondary-blue;
+  color: white;
+  padding: 10px 15px;
+  font-size: 0.7rem;
+  border-radius: 3px;
+  float: right;
+  text-transform: uppercase;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease-out;
+}
+
+.button {
+  @extend %button;
+}
+
+.button:hover {
+  background-color: $primary-dark-blue;
+}
+
+.button--green {
+  @extend %button;
+  background-color: $accent-green;
+  color: white;
+  border-color: $accent-dark-green;
+}
+
+.button--green:focus {
+  outline: $accent-green auto 5px;
+}
+
+.button--green:hover {
+  background-color: $accent-dark-green;
+}
+
+.button--red {
+  @extend %button;
+  background-color: $accent-red;
+  color: white;
+  border-color: $accent-dark-red;
+}
+
+.button--red:focus {
+  outline: $accent-red auto 5px;
+}
+
+.button--red:hover {
+  background-color: $accent-dark-red;
+}

@@ -2,26 +2,77 @@ html {
   font: 16px $font-stack-secondary;
 }
 
-h1 {
-  font: 4rem $font-stack-primary;
-}
-
-button {
-  background-color: black;
-  border: 2px solid rgb(27, 27, 27);
-  color: white;
-  padding: 10px 20px;
-  font-size: 0.8rem;
-  border-radius: 2px;
+section, header, footer {
+  margin-top: 15px;
+  margin-bottom: 25px;
 }
 
 ul {
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 li {
-  background-color: rgb(206, 206, 206);
-  padding: 30px;
-  margin: 20px;
-  width: 25%;
+  padding: 0;
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0px;
+}
+
+form {
+  width: 90%;
+  margin: auto;
+}
+
+fieldset {
+  border: 4px dotted $primary-blue;
+  background-color: $primary-light-blue;
+  padding: 15px;
+}
+
+label {
+  width: 100%;
+  margin: 5px auto;
+}
+
+legend {
+  font-weight: 500;
+}
+
+form label {
+  font-size: 0.9rem;
+}
+
+input {
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  outline: 1px solid $primary-grey;
+}
+
+@media only screen and (min-width: 425px) {
+  html {
+    font-size: 20px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  form {
+    width: 95%;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  html {
+    font-size: 24px;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  html {
+    font-size: 26px;
+  }
 }

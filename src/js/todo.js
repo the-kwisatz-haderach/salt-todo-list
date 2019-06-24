@@ -52,15 +52,15 @@ window.onload = () => {
     const createdAt = new Date(timestamp).toDateString();
 
     const todoElement = document.createElement('LI');
-    todoElement.classList.add(`--${state}`);
+    todoElement.classList.add(`list-item--${state}`);
     todoElement.id = id;
 
     let todoHtml = '';
-    todoHtml += '<div>';
-    todoHtml += `<h3>${title}</h3>`;
-    todoHtml += description ? `<p>${description}</p>` : '';
-    todoHtml += state === 'done' ? '<button class="remove-todo" type="button">Remove item</button>' : '';
-    todoHtml += `<time datetime="${createdAt}">Created ${createdAt}</time>`;
+    todoHtml += `<h3 class="list-item__heading">${title}</h3>`;
+    todoHtml += description ? `<p class="list-item__description">${description}</p>` : '';
+    todoHtml += '<div class="list-item__bottom">';
+    todoHtml += `<time class="list-item__timestamp" datetime="${createdAt}">Created ${createdAt}</time>`;
+    todoHtml += state === 'done' ? '<button class="button--red" type="button">Delete</button>' : '';
     todoHtml += '</div>';
     todoElement.innerHTML = todoHtml;
 
@@ -126,28 +126,34 @@ window.onload = () => {
     const creationSection = document.getElementById('todo-creation');
     const sortOrder = getState() ? getState().sortOrder : undefined;
 
-    presentationSection.innerHTML = `<label for="sort-order">Sort order</label> 
-      <select id="sort-order">
-        ${sortOrder === 'ascending'
-    ? `<option value="ascending">Ascending</option>
-          <option value="descending">Descending</option>`
-    : `<option value="descending">Descending</option>
-          <option value="ascending">Ascending</option>`}
-      </select>
-      <button type="button" onclick="clearAll();">Clear all</button>
-      <ul id="todo-list"></ul>
-      <ul id="completed-list"></ul>`;
-
-    creationSection.innerHTML = `<form id="create-todo" autocomplete="off">
+    creationSection.innerHTML = `
+    <form id="create-todo" autocomplete="off">
         <fieldset>
           <legend>Create new list item</legend>
           <label for="title">Title</label>
-          <input id="title" type="text" name="title" placeholder="Buy eggs..." required />
+          <input id="title" type="text" name="title" required />
           <label for="description">Description</label>
-          <input id="description" type="text" name="description" placeholder="Needed for pancakes..." />
-          <button type="submit" form="create-todo">Add item</button>
+          <input id="description" type="text" name="description" />
+          <button class="button--green" type="submit" form="create-todo">Add item</button>
         </fieldset>
       </form>`;
+
+    presentationSection.innerHTML = `
+    <div class="filter-menu">
+      <div class="filter">
+        <label class="filter__label" for="sort-order">Sort order:</label> 
+        <select class="filter__dropdown" id="sort-order">
+        ${sortOrder === 'ascending'
+    ? `<option value="ascending">Ascending</option>
+      <option value="descending">Descending</option>`
+    : `<option value="descending">Descending</option>
+        <option value="ascending">Ascending</option>`}
+        </select>
+      </div>
+      <button class="button" type="button" onclick="clearAll();">Clear</button>
+    </div>
+    <ul class="todo-list" id="todo-list"></ul>
+    <ul class="todo-list" id="completed-list"></ul>`;
   }
 
   function clearAll() {
@@ -166,7 +172,7 @@ window.onload = () => {
   }
 
   function handleTodoClick({ target, currentTarget }) {
-    if (target.classList.contains('remove-todo')) {
+    if (target.classList.contains('button--red')) {
       removeTodo(currentTarget);
     } else {
       const { id } = currentTarget;

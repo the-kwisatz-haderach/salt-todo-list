@@ -1,0 +1,15 @@
+.main-header {
+  margin-top: 20px;
+  padding: 15px 10px 10px 10px;
+}
+
+.main-header__heading {
+  font: 2.8rem $font-stack-primary;
+  text-align: center;
+  margin-top: 10px;
+}
+
+@media only screen and (min-width: 425px) {
+  .main-header__heading {
+  }
+}
