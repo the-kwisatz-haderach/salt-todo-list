@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --fix",
-    "dev": "webpack-dev-server --"
+    "dev": "webpack-dev-server --",
+    "sass": "sass --watch 'src/style/main.scss' 'src/style/todo.css'"
   },
   "license": "MIT",
   "devDependencies": {
     "eslint": "^5.15.3",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.16.0"
+    "eslint-plugin-import": "^2.16.0",
+    "sass": "^1.21.0"
   },
   "dependencies": {
     "webpack": "^4.35.0",

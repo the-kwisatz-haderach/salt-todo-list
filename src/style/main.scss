@@ -1,0 +1,17 @@
+@import './reset';
+@import './theme';
+@import './base';
+@import './layout';
+
+.--done {
+  background-color: rgb(60, 213, 121);
+}
+
+body {
+  background-color: rgb(104, 191, 238);
+}
+
+main {
+  background-color: #fff;
+  margin: 25px;
+}
